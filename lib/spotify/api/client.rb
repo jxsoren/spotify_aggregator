@@ -2,11 +2,15 @@ module Spotify
   module Api
     class Client
 
-      def self.encoded_credentials
-        Base64.strict_encode64("#{ENV['CLIENT_ID']}:#{ENV['CLIENT_SECRET']}")
+      def initialize
+        @access_token = create_access_token
       end
 
-      def self.create_access_token
+      def authorize
+
+      end
+
+      def create_access_token
         conn = Faraday.new(
           url: 'https://accounts.spotify.com',
           headers: {
@@ -16,9 +20,30 @@ module Spotify
         )
 
         response = conn.post('/api/token', grant_type: 'client_credentials')
+        JSON.parse(response.body)['access_token']
+      end
+
+      def encoded_credentials
+        Base64.strict_encode64("#{ENV['CLIENT_ID']}:#{ENV['CLIENT_SECRET']}")
+      end
+
+      def get_current_users_playlists
+        conn = Faraday.new(
+          url: 'https://api.spotify.com/v1',
+          headers: {
+            'Content-Type' => 'application/json',
+            'Authorization' => "Bearer #{@access_token}"
+          }
+        )
+
+        response = conn.get('/me/playlists') do |req|
+          req.params['limit'] = 100
+        end
+
         JSON.parse(response.body)
       end
 
     end
+
   end
 end
