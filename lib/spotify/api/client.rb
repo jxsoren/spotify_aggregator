@@ -3,11 +3,7 @@ module Spotify
     class Client
 
       def initialize
-        @access_token = create_access_token
-      end
-
-      def authorize
-
+        @access_token = nil
       end
 
       def create_access_token
@@ -21,10 +17,6 @@ module Spotify
 
         response = conn.post('/api/token', grant_type: 'client_credentials')
         JSON.parse(response.body)['access_token']
-      end
-
-      def encoded_credentials
-        Base64.strict_encode64("#{ENV['CLIENT_ID']}:#{ENV['CLIENT_SECRET']}")
       end
 
       def get_current_users_playlists
