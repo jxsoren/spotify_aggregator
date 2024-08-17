@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
   get 'spotify/index'
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  get 'login/index'
+  get 'login/login'
+  get 'login/callback'
 end
