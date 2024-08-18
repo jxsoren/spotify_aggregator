@@ -2,8 +2,8 @@ module Spotify
   module Api
     class Client
 
-      def initialize
-        @access_token = nil
+      def initialize(access_token)
+        @access_token = access_token
       end
 
       def get_current_users_playlists
@@ -11,7 +11,7 @@ module Spotify
           url: 'https://api.spotify.com',
           headers: {
             'Content-Type' => 'application/json',
-            'Authorization' => "Bearer #{session['access_token']}"
+            'Authorization' => "Bearer #{@access_token}}"
           }
         )
 
